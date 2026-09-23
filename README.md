@@ -143,11 +143,17 @@ Slipstream is an orchestration layer designed to interface with your existing lo
 
 ### Service Endpoint
 
-Once initialized, the orchestrator exposes its OpenAI-compatible inference endpoint directly on your host machine:
+Once initialized, the orchestrator exposes its Ollama-compatible and OpenAI-compatible inference endpoint directly on your host machine:
 
 - Endpoint URL: http://localhost:7777
 
-- Verification:
+- Verification Ollama-compatible:
+
+   ```bash
+   curl http://localhost:7777/api/tags
+   ```
+
+- Verification OpenAI-compatible:
 
    ```bash
    curl http://localhost:7777/v1/models
