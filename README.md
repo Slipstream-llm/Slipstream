@@ -141,6 +141,20 @@ Slipstream is an orchestration layer designed to interface with your existing lo
 *(This will automatically execute the necessary `docker compose` commands and build the local container using the binary payload).*
 
 
+### Service Endpoint
+
+Once initialized, the orchestrator exposes its OpenAI-compatible inference endpoint directly on your host machine:
+
+- Endpoint URL: http://localhost:7777
+
+- Verification:
+
+   ```bash
+   curl http://localhost:7777/v1/models
+   ```
+
+
+
 ### Command Line Options
 
 For a full list of runtime arguments, utility flags, and configuration overrides, use the built-in help menu:
