@@ -160,6 +160,27 @@ Once initialized, the orchestrator exposes its Ollama-compatible and OpenAI-comp
    ```
 
 
+### Container CLI Access
+
+For direct management and local verification, you can drop into the orchestrator's internal command-line interface:
+
+```bash
+# Open a terminal session to access Slipstream directly via the CLI:
+docker exec -it slipstream bash
+
+# List available models
+slip ls
+
+# List active models
+slip ps
+
+# Run a test model
+slip run Slipstream/qwen3.5:4b-q4_k_m-slipstream --verbose "Hello!  What is your name?"
+
+# Help with using the slip command
+slip --help
+```
+
 
 ### Command Line Options
 
