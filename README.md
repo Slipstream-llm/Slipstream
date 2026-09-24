@@ -187,6 +187,17 @@ slip --help
 ```
 
 
+
+### Official Models
+
+All official Slipstream-optimized models (featuring zero-configuration draft parameters) are available directly from the registry:
+**[ollama.com/Slipstream](https://ollama.com/Slipstream)**
+
+[![Slipstream on Ollama](https://img.shields.io/badge/Ollama-Slipstream-black?style=for-the-badge)](https://ollama.com/Slipstream)
+
+
+
+
 ### Command Line Options
 
 For a full list of runtime arguments, utility flags, and configuration overrides, use the built-in help menu:
@@ -195,13 +206,6 @@ For a full list of runtime arguments, utility flags, and configuration overrides
 ./start-slipstream.sh --help
 ```
 
-
-### Official Models
-
-All official Slipstream-optimized models (featuring zero-configuration draft parameters) are available directly from the registry:
-**[ollama.com/Slipstream](https://ollama.com/Slipstream)**
-
-[![Slipstream on Ollama](https://img.shields.io/badge/Ollama-Slipstream-black?style=for-the-badge)](https://ollama.com/Slipstream)
 
 
 ### Advanced Configuration (Environment Variables)
