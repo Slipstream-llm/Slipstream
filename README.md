@@ -174,7 +174,12 @@ slip ls
 # List active models
 slip ps
 
-# Run a test model
+# Run a test on a Slipstream enabled model
+#
+# More offical Slipstream models at: 
+#
+#    https://ollama.com/Slipstream
+#
 slip run Slipstream/qwen3.5:4b-q4_k_m-slipstream --verbose "Hello!  What is your name?"
 
 # Help with using the slip command
@@ -189,6 +194,13 @@ For a full list of runtime arguments, utility flags, and configuration overrides
 ```bash
 ./start-slipstream.sh --help
 ```
+
+
+## Official Models
+All official Slipstream-optimized models (featuring zero-configuration draft parameters) are available directly on our registry:
+**[ollama.com/Slipstream](https://ollama.com/Slipstream)**
+
+[![Slipstream on Ollama](https://img.shields.io/badge/Ollama-Slipstream-black?style=for-the-badge)](https://ollama.com/Slipstream)
 
 
 ### Advanced Configuration (Environment Variables)
