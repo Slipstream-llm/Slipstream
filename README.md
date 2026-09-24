@@ -196,8 +196,9 @@ For a full list of runtime arguments, utility flags, and configuration overrides
 ```
 
 
-## Official Models
-All official Slipstream-optimized models (featuring zero-configuration draft parameters) are available directly on our registry:
+### Official Models
+
+All official Slipstream-optimized models (featuring zero-configuration draft parameters) are available directly from the registry:
 **[ollama.com/Slipstream](https://ollama.com/Slipstream)**
 
 [![Slipstream on Ollama](https://img.shields.io/badge/Ollama-Slipstream-black?style=for-the-badge)](https://ollama.com/Slipstream)
