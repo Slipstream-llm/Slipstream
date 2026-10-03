@@ -1,6 +1,6 @@
 # Slipstream Community & Evaluation License
 Version 1.0 — October 2026
-Copyright (c) 2026 Frugal AI HQ / Slipstream Authors. All rights reserved.
+Copyright (c) 2026 Frugal AI HQ. All rights reserved.
 
 Redistribution and use of the Slipstream software in binary form, with or without modification, are permitted provided that the following conditions are met:
 
