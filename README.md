@@ -234,4 +234,12 @@ cd slipstream
 ./start-slipstream.sh --build
 ```
 
+---
 
+## License
+
+Slipstream is distributed under the **Slipstream Community & Evaluation License**. 
+
+* **Free for Community & Testing:** Free to download, run, and test for individuals, researchers, and internal organizational evaluation.
+* **Attribution Required:** Retain project credits and links to Frugal AI HQ.
+* **Commercial Integration:** If you are embedding Slipstream into a commercial product, appliance, or paid service, please reach out to `contact@slipstream-llm.com` for commercial licensing.
