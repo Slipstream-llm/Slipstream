@@ -238,8 +238,9 @@ cd slipstream
 
 ## License
 
-Slipstream is distributed under the **Slipstream Community & Evaluation License**. 
+Slipstream is distributed under the **Slipstream Freeware License**. 
 
-* **Free for Community & Testing:** Free to download, run, and test for individuals, researchers, and internal organizational evaluation.
-* **Attribution Required:** Retain project credits and links to Frugal AI HQ.
-* **Commercial Integration:** If you are embedding Slipstream into a commercial product, appliance, or paid service, please reach out to `contact@slipstream-llm.com` for commercial licensing.
+* **100% Free:** You are granted a free, worldwide license to download, install, execute, copy, and redistribute this binary for any personal, educational, research, or commercial purpose at no cost.
+* **Attribution Required:** If you redistribute Slipstream or build a dashboard directly derived from it, you must retain the copyright notices, project credits, and links to Frugal AI HQ. Command-line startup banners must not be suppressed.
+
+See the full [LICENSE.md](LICENSE.md) file for exact terms.
