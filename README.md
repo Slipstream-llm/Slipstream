@@ -31,6 +31,24 @@ If your target model does not fit natively on your VRAM, **step down the quant.*
 
 **If it doesn't fit on the card, you don't run it.**
 
+
+
+### The `--vision-in-ram` Exemption (For the Pedants)
+If you are reading the CLI documentation and think you have discovered a contradiction to the Zero CPU Offload rule because of the `--vision-in-ram` flag, congratulations on reading the manual. Now learn how the architecture actually works.
+
+There is a fundamental physics difference between Time-To-First-Token (TTFT) and Tokens-Per-Second (TPS).
+
+The multimodal projector (`mmproj`) is an intake mechanism. It evaluates the image matrix exactly once during prompt processing. If you use `--vision-in-ram` to save 1.5GB to 3GB of VRAM, you pay the PCIe latency tax exactly once. Your Time-To-First-Token might spike to 30 seconds as the CPU grinds through the image, but once those embeddings are handed off to the GPU, the vision encoder goes dormant.
+
+The autoregressive generation loop—the actual engine where Slipstream's speculative MTP drafting occurs—takes over. Because the model weights and the KV cache remain 100% locked on the GPU silicon, generation instantly snaps back to maximum throughput.
+
+Offloading weights or KV cache to system RAM forces the PCIe bus to choke on every single generated token, collapsing the speculative drafting loop. Offloading the vision encoder is a one-time toll fee at the gate.
+
+If you do not understand the difference between a one-time $O(1)$ prompt evaluation penalty and an $O(N)$ autoregressive generation bottleneck, you should not be orchestrating multi-node hardware.
+
+
+
+
 ---
 
 ## スリップストリーム・マニフェスト：CPUオフロード厳禁
@@ -54,6 +72,23 @@ Q8モデルをシステムメモリ経由で力技で動かそうとしないで
 ターゲットモデルがVRAMにネイティブに収まらない場合は、**量子化のレベルを下げてください。** GPU上に完全常駐するQ4_K_MやQ3_K_Mの量子化モデルは、システムRAMの帯域を奪い合う低圧縮モデルのパフォーマンスを完全に圧倒します。Slipstreamは、利用可能なVRAMを最大化するためにマルチGPUのメモリプールをネイティブにルーティングおよび管理するように設計されていますが、ユーザー自身の誤ったハードウェア割り当て（メモリ配置）から救い出すことはできません。
 
 **VRAMに収まらないなら、動かさないこと。**
+
+
+### `--vision-in-ram` の例外規定（揚げ足取りな連中へ）
+
+CLIのドキュメントを読み込んで、`--vision-in-ram` フラグの存在を盾に「CPUオフロード厳禁のルールと矛盾しているではないか」と鬼の首を取った気になっているなら——まずはマニュアルを読んだ熱心さだけは褒めておこう。だが、次はアーキテクチャが実際にどう動いているかを理解する番だ。
+
+Time-To-First-Token（TTFT：初速トークン生成時間）と Tokens-Per-Second（TPS：継続的なトークン生成速度）の間には、物理的に決定的な違いが存在する。
+
+マルチモーダル・プロジェクター（`mmproj`）は、あくまで入力機構（インテーク）に過ぎない。画像マトリクスの評価と計算が行われるのは、プロンプト処理時の「最初の1回」だけだ。1.5GB〜3GBのVRAMを節約するために `--vision-in-ram` を使った場合、PCIeの遅延ペナルティという税金を支払うのは文字通りその1回きりである。CPUが画像を処理する間、TTFTが30秒近くまで跳ね上がるかもしれないが、生成された埋め込み（Embeddings）がGPUに渡された瞬間、ビジョンエンコーダーは完全に休眠状態に入る。
+
+そこから先は、Slipstreamの投機的MTPドラフトが真価を発揮する「自己回帰生成ループ」へとバトンが渡される。モデルの重みとKVキャッシュが100% GPUシリコン上に常駐している限り、トークン生成速度は瞬時に最大スループットへと復帰する。
+
+重みやKVキャッシュをシステムRAMへオフロードすることは、生成される**すべてのトークンごと**にPCIeバスを窒息させ、投機的ドラフトの同期ループを崩壊させることを意味する。一方で、ビジョンエンコーダーのオフロードは「料金所で最初に一度だけ払う通行料」に過ぎない。
+
+たった1度きりの $O(1)$ プロンプト評価ペナルティと、$O(N)$ で累積する自己回帰生成のボトルネックの違いすら理解できないのであれば、最初からマルチノードのハードウェア構成に口を挟むべきではない。
+
+
 
 ---
 
