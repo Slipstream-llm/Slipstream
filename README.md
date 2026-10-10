@@ -284,7 +284,7 @@ To install a new release, cleanly remove the old runtime environment and force a
 ./stop-slipstream.sh
 cd ..
 rm -rf slipstream
-# Extract the new slipstream.tar.gz here, then:
+# Extract the new slipstream-VERSION.tar.gz here, then:
 cd slipstream
 ./start-slipstream.sh --build
 ```
