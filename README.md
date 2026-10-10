@@ -146,117 +146,137 @@ Slipstreamは、特定ベンダーへの依存（ベンダーロックイン）�
 
 ---
 
-## Deployment & Usage
+## Deployment & Quickstart
 
 Slipstream is distributed strictly as a self-contained runtime bundle containing pre-compiled binaries and orchestration scripts. No raw source code is required or provided.
 
-### Prerequisites
-Slipstream is an orchestration layer designed to interface with your existing local inference engine. 
-* **Ollama** must be installed and running natively on your host machine (`localhost`) before launching the Slipstream container.
+### 1. Prerequisites & Installation
 
-
-### Installation
+Slipstream relies entirely on Docker for its zero-leakage containerized deployment, so you must have Docker-CE installed directly from the official Docker website. It is an orchestration layer designed to interface with your existing local inference engine, meaning **Ollama** must be installed and running natively on your host machine (`localhost`) before launching the container.
 
 1. Download the latest `slipstream-VERSION.tar.gz` payload from the [Releases](https://github.com/Slipstream-llm/Slipstream/releases) page.
 
+
 2. Extract the archive into your desired directory:
 
-   ```bash
-   tar -xzf slipstream.tar.gz
-   cd slipstream
-   ```
+    ```bash
+    tar -xzf slipstream-VERSION.tar.gz
+    cd slipstream
+    ```
+
 
 3. Launch the orchestrator using the provided wrapper script:
 
-   ```bash
-   ./start-slipstream.sh
-   ```
+    ```bash
+    ./start-slipstream.sh
+    ```
 
 
-*(This will automatically execute the necessary `docker compose` commands and build the local container using the binary payload).*
+
+*(This will automatically execute the necessary `docker compose` commands and build the local container using the binary payload)*.
+
+### 2. Verify Endpoints
+
+Once initialized, the orchestrator exposes its inference endpoints directly on your host machine.
+
+* **Ollama-compatible:** `curl http://localhost:7777/api/tags`
+
+* **OpenAI-compatible:** `curl http://localhost:7777/v1/models`
 
 
-### Service Endpoint
+### 3. Take the Engine for a Spin
 
-Once initialized, the orchestrator exposes its Ollama-compatible and OpenAI-compatible inference endpoint directly on your host machine:
+Because Slipstream operates as a strictly isolated container, you will not find the `slip` command polluting your host system's standard PATH. Drop directly into the container to manage your models and run your first native inference.
 
-- Endpoint URL: http://localhost:7777
-
-- Verification Ollama-compatible:
-
-   ```bash
-   curl http://localhost:7777/api/tags
-   ```
-
-- Verification OpenAI-compatible:
-
-   ```bash
-   curl http://localhost:7777/v1/models
-   ```
-
-
-### Container CLI Access
-
-For direct management and local verification, you can drop into the orchestrator's internal command-line interface:
+Jump into the active Slipstream container:
 
 ```bash
-# Open a terminal session to access Slipstream directly via the CLI:
 docker exec -it slipstream bash
-
-# List available models
-slip ls
-
-# List active models
-slip ps
-
-# Run a test on a Slipstream enabled model
-#
-# More offical Slipstream models at: 
-#
-#    https://ollama.com/Slipstream
-#
-slip run Slipstream/qwen3.5:4b-q4_k_m-slipstream --verbose "Hello!  What is your name?"
-
-# Help with using the slip command
-slip --help
 ```
 
+Run a model natively. If it is an official Slipstream-optimized model, the orchestrator will automatically handle the MTP drafting parameters:
+
+```bash
+root@0e05fe9b6b38:/workspace# slip run Slipstream/qwen3.5:4b-q4_k_m-slipstream
+>>> Hello!
+<think>
+
+</think>
+
+Hello! How can I help you today? 😊  
+Feel free to ask a question, need assistance with a task, or just want to chat!
+```
+
+Inspect the live telemetry to verify your 100% VRAM residency and watch the engine flex:
+
+```text
+root@0e05fe9b6b38:/workspace# slip ps
+=== SLIPSTREAM RUNTIME STATUS ===
+Slipstream Mode: Slipstream Native (Strict Execution)
+Backend: CUDA | Flash Attn: ON | GPU Count: 1
+VRAM: 6.000 GB / 12.000 GB (6.100 GB Free)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[slipstream] [*] ALIVE / WAITING
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Model:    Slipstream/qwen3.5:4b-q4_k_m-slipstream
+  Strategy: ngram-map-k (depth: 3)
+  Geometry: 4096 CTX per thread | Est. 3.3 GB (100% GPU)
+            4096 CTX allocated for all threads
+  Threads:  0/1 (0 Active | 0 Queued)
+  Metrics:  Load: 2755ms | TTFT: 431ms
+            Speed: 57.32 t/s (57.32 t/s per slot) [last]
+            Drafting: 0.00% (0 accepted / 0 proposed)
+            Acceptance Rate: 0.00%
+  Expires:  No expiration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+### 4. Expand Your Local Cluster
+
+Want to push your hardware further? You don't have to configure draft models manually. All official, zero-configuration Slipstream models—including our ultra-fast 2B/4B vision models and heavy-duty Qwen variants—are pre-calibrated and waiting for you in the official registry.
+
+**[Browse the Official Registry: ollama.com/Slipstream](https://ollama.com/Slipstream)**
+
+### Building Custom Models
+
+Slipstream uses specialized `SYSTEM` prompt pragmas to dynamically route speculative draft models and manage multi-threading. If you want to configure your own local models for Slipstream's orchestration engine, read the **[Custom Model Configuration Guide](CUSTOM_MODELS.md)**.
+
+---
+
+## Advanced Configuration (Environment Variables)
+
+Slipstream is designed to work out-of-the-box with standard default paths, but it can be dynamically configured using environment variables. You can export these variables in your shell before launching, or pass them inline with the start script.
+
+* **`OLLAMA_MODELS`**: Overrides the default model directory. Use this if your `.gguf` files are stored on a separate drive or non-standard path rather than the default `~/.ollama/models`.
 
 
-### Official Models
-
-All official Slipstream-optimized models (featuring zero-configuration draft parameters) are available directly from the registry:
-**[ollama.com/Slipstream](https://ollama.com/Slipstream)**
-
-[![Slipstream on Ollama](https://img.shields.io/badge/Ollama-Slipstream-black?style=for-the-badge)](https://ollama.com/Slipstream)
+* *Example:* `OLLAMA_MODELS=/mnt/nvme/models ./start-slipstream.sh`
 
 
 
+* **`SLIP_OLLAMA_PORT`**: Instructs Slipstream to bind to a custom Ollama host port if your base inference engine is not running on the default `11434`.
 
-### Command Line Options
 
-For a full list of runtime arguments, utility flags, and configuration overrides, use the built-in help menu:
+* *Example:* `SLIP_OLLAMA_PORT=11435 ./start-slipstream.sh`
+
+
+
+* **`SLIP_QUIRK`**: Activates specialized orchestration routing for specific hardware edge cases or complex multi-vendor setups (such as custom memory pooling for AMD Radeon Pro V620 arrays).
+
+
+* *Example:* `SLIP_QUIRK=v620 ./start-slipstream.sh`
+
+
+For a full list of runtime arguments and utility flags, use the built-in help menu:
 
 ```bash
 ./start-slipstream.sh --help
 ```
 
+---
 
-
-### Advanced Configuration (Environment Variables)
-
-Slipstream is designed to work out-of-the-box with standard default paths, but it can be dynamically configured using environment variables. You can export these variables in your shell before launching, or pass them inline with the start script.
-
-*   **`OLLAMA_MODELS`**: Overrides the default model directory. Use this if your `.gguf` files are stored on a separate drive or non-standard path rather than the default `~/.ollama/models`.
-    *   *Example:* `OLLAMA_MODELS=/mnt/nvme/models ./start-slipstream.sh`
-*   **`SLIP_OLLAMA_PORT`**: Instructs Slipstream to bind to a custom Ollama host port if your base inference engine is not running on the default `11434`.
-    *   *Example:* `SLIP_OLLAMA_PORT=11435 ./start-slipstream.sh`
-*   **`SLIP_QUIRK`**: Activates specialized orchestration routing for specific hardware edge cases or complex multi-vendor setups (such as custom memory pooling for AMD Radeon Pro V620 arrays).
-    *   *Example:* `SLIP_QUIRK=v620 ./start-slipstream.sh`
-
-
-
-### Upgrading
+## Upgrading
 
 To install a new release, cleanly remove the old runtime environment and force a rebuild with the new payload:
 
@@ -270,6 +290,30 @@ cd slipstream
 ```
 
 ---
+
+## Frequently Asked Questions
+
+**Q: Do I need to compile Slipstream from source?**
+No. Slipstream is distributed strictly as a self-contained runtime bundle containing pre-compiled binaries and orchestration scripts. You simply extract the release payload and use the provided `start-slipstream.sh` script to launch the orchestrator, and `stop-slipstream.sh` to safely spin it down.
+
+**Q: Do I have to configure my own draft models for speculative decoding?**
+No. While advanced users can build custom pipelines, we maintain an official registry of Slipstream-optimized models. These models (ranging from lightweight 2B/4B vision models to massive multimodel payloads) are pre-configured with the exact drafting parameters needed to hit maximum TPS on your hardware. You can pull them immediately from [ollama.com/Slipstream](https://ollama.com/Slipstream).
+
+**Q: Can I offload just a few layers to system RAM if my model is slightly too big?**
+Absolutely not. Slipstream enforces a strict zero CPU offload policy where both the model weights and the entire KV cache must fit completely on the GPU silicon. If you offload even a few layers, your generation loop is throttled down to system DDR speeds, which causes the speculative drafting loop to collapse under memory transfer overhead. If your target model does not fit natively, step down the quant.
+
+**Q: What about the `--vision-in-ram` flag? Doesn't that violate the zero offload rule?**
+No. Offloading the vision encoder is a one-time $O(1)$ penalty during prompt evaluation. Your Time-To-First-Token will spike, but once the embeddings are handed off to the GPU, the vision encoder goes dormant. The autoregressive generation loop takes over, and because the weights and KV cache remain 100% locked on the GPU, token generation instantly returns to maximum throughput.
+
+**Q: Why use cast-off GPUs instead of buying a modern 12GB or 16GB card?**
+It is a matter of hardware economics. Slipstream dynamically partitions and streams model tensors across heterogeneous, mixed-vendor consumer GPUs. Instead of spending around ¥42,000 on a single RTX 3060 12GB, you can assemble a complete, standalone compute node with 14GB to 16GB of VRAM using secondary market parts (like combining an AMD RX 580 8GB and a GTX 1660 Super 6GB) for a fraction of the hardware cost.
+
+**Q: Is it safe to use Ollama's standard garbage collection while running Slipstream?**
+Admin Warning: Exercise caution. Ollama's native garbage collector currently does not cryptographically trace Slipstream's dynamic `// DRAFT_MODEL` tags. Running aggressive blob pruning operations on your host can result in the accidental deletion of draft models that are actively tethered via Slipstream.
+
+**Q: Can I use this for commercial or enterprise projects?**
+Yes. Slipstream is released as freeware and grants a free, worldwide license for personal, educational, research, or commercial use. However, if you redistribute the binary or build a user-facing dashboard derived from it, you must retain the original copyright notice, provide prominent attribution to "Frugal AI HQ", and ensure that the command-line startup banners are not removed or obfuscated.
+
 
 ## License
 
