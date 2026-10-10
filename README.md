@@ -274,6 +274,31 @@ For a full list of runtime arguments and utility flags, use the built-in help me
 ./start-slipstream.sh --help
 ```
 
+
+### Heterogeneous Hardware & Quirks
+
+Slipstream is designed to automatically detect and route traffic across standard, homogenous hardware configurations (e.g., a standard multi-GPU NVIDIA array or AMD array). For these baseline systems, you do not need to specify any hardware flags.
+
+However, the core mission of Slipstream is to unlock extreme-throughput inference on heterogeneous, mixed-vendor salvage rigs. When combining different GPU architectures, wrangling integrated graphics, or managing custom memory pooling, you must explicitly declare your hardware topology using startup flags.
+
+* **Standard Deployment (Auto-Detection):**
+For a clean, single-vendor array or standard headless node, simply start the engine. Slipstream handles the mapping natively:
+
+    ```bash
+    ./start-slipstream.sh
+    ```
+
+
+* **Heterogeneous / Salvage Deployment:**
+If you are orchestrating complex topology -- such as an AMD iGPU combined with discrete cards or mixed compute backends -- you must use the `--quirk`, `--hybrid`, and `--devices` flags to explicitly map the execution devices. For example, explicitly routing across multiple Vulkan interfaces on an AMD-based node:
+
+    ```bash
+    ./start-slipstream.sh --quirk amd --hybrid --devices Vulkan0,Vulkan1,Vulkan2
+    ```
+
+
+
+
 ---
 
 ## Upgrading
