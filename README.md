@@ -48,8 +48,32 @@ If you do not understand the difference between a one-time $O(1)$ prompt evaluat
 
 
 
+--------
 
----
+
+
+## The Frugal AI Ecosystem & Project Origins
+
+Slipstream is the culmination of three distinct projects built throughout 2026 to democratize local AI infrastructure.
+
+**FrugalAIHQ.com (January 2026)**
+
+The initiative began as a community hub and Discord server designed to teach hands-on AI deployment on a strict budget. While the tutorial community remained small, the project established the bedrock for everything to come, leaving behind a fully provisioned, enterprise-grade CDN and web infrastructure.
+
+**FieldMouse-AI.com (February 2026)**
+
+What started as a simple requirement for a single usable Qwen3.5 quant for a custom RAG pipeline rapidly escalated into a full-scale industrial operation. Rather than settling for existing models, a custom automated quantization factory was engineered from scratch. Knowing standard `wikitext` datasets would yield subpar results, a proprietary 2,000,000+ token `imatrix` dataset was hand-curated. By March 19, the FieldMouse-AI factory had published over 230 highly optimized models to the Ollama registry.
+
+**Slipstream-LLM.com (August 2026)**
+
+Slipstream began as an experimental tech demo for speculative decoding. However, on August 14, Qwen3.8:27B was released with native `draft-mtp` support. Operations were immediately paused to upgrade the entire FieldMouse-AI factory. Using a massive, newly expanded 4,000,000+ token `imatrix`, the entire model collection was requantized—swelling the FieldMouse-AI registry to over 450 models, including heavyweights like Qwen3.6:35B-A3B.
+
+Testing these highly specialized speculative configurations manually became impossible. Systems engineering instincts took over, and what was supposed to be a simple tech demo evolved into Slipstream: a dynamic, multi-threaded orchestration engine built to handle the heavy lifting of heterogeneous, multi-GPU speculative decoding.
+
+
+
+
+--------
 
 ## スリップストリーム・マニフェスト：CPUオフロード厳禁
 
