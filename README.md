@@ -54,7 +54,7 @@ If you do not understand the difference between a one-time $O(1)$ prompt evaluat
 
 ## The Frugal AI Ecosystem & Project Origins
 
-Slipstream is the culmination of four distinct projects built throughout 2026 to democratize local AI infrastructure.
+Slipstream is the culmination of four distinct projects built throughout 2025 and 2026 to democratize local AI infrastructure.
 
 **The iGPU Exile & The CPU-Only Crucible (March 2025)**
 
@@ -131,7 +131,7 @@ Time-To-First-Token（TTFT：初速トークン生成時間）と Tokens-Per-Sec
 
 ## Frugal AIエコシステムとプロジェクトの起源
 
-Slipstreamは、ローカルAIインフラの民主化を目指して2026年を通じて構築された、4つの独立したプロジェクトの集大成である。
+Slipstreamは、ローカルAIインフラの民主化を目指して2025年〜2026年を通じて構築された、4つの独立したプロジェクトの集大成である。
 
 **iGPUからの追放とCPU単独推論という試練（2025年3月）**
 
