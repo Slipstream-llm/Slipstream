@@ -56,6 +56,18 @@ If you do not understand the difference between a one-time $O(1)$ prompt evaluat
 
 Slipstream is the culmination of three distinct projects built throughout 2026 to democratize local AI infrastructure.
 
+**The iGPU Exile & The CPU-Only Crucible (March 2025)**
+
+The foundation of Slipstream wasn't built on enterprise hardware; it was forged in a worst-case scenario: a 2022 Ryzen laptop trapped behind broken software abstractions.
+
+In early 2025, standard proprietary daemons completely failed to properly interface with AMD integrated graphics. Despite using `UniversalAMDFormBrowser` to bypass OEM BIOS restrictions and hard-lock a 16GB UMA frame buffer, the vendored wrappers consistently misread the hardware, assumed there was insufficient VRAM, and refused to offload the math to the iGPU.
+
+Instead of playing environment-variable whack-a-mole on the forums or waiting for a corporate patch, operations were forcefully routed to the x86 cores. Out of pure necessity, a complete, locally hosted document retrieval and context-injection pipeline was engineered from scratch—long before the academic term "RAG" was ever introduced to the project.
+
+Running heavy inference exclusively on system DDR memory was agonizingly slow, but it provided a grueling masterclass in the unforgiving physics of memory bandwidth constraints. Surviving that CPU-bound bottleneck is exactly what crystallized Slipstream's uncompromising **"Zero CPU Offload"** mandate.
+
+More importantly, it established the core Frugal AI ethos: when the industry-standard software fails to utilize your silicon, you do not beg the developers for a fix. You go straight to the metal and build an architecture that replaces them entirely.
+
 **FrugalAIHQ.com (January 2026)**
 
 The initiative began as a community hub and Discord server designed to teach hands-on AI deployment on a strict budget. While the tutorial community remained small, the project established the bedrock for everything to come, leaving behind a fully provisioned, enterprise-grade CDN and web infrastructure.
@@ -110,11 +122,47 @@ Time-To-First-Token（TTFT：初速トークン生成時間）と Tokens-Per-Sec
 
 重みやKVキャッシュをシステムRAMへオフロードすることは、生成される**すべてのトークンごと**にPCIeバスを窒息させ、投機的ドラフトの同期ループを崩壊させることを意味する。一方で、ビジョンエンコーダーのオフロードは「料金所で最初に一度だけ払う通行料」に過ぎない。
 
-たった1度きりの $O(1)$ プロンプト評価ペナルティと、$O(N)$ で累積する自己回帰生成のボトルネックの違いすら理解できないのであれば、最初からマルチノードのハードウェア構成に口を挟むべきではない。
+たった1度きりの  $O(1)$  プロンプト評価ペナルティと、 $O(N)$  で累積する自己回帰生成のボトルネックの違いすら理解できないのであれば、最初からマルチノードのハードウェア構成に口を挟むべきではない。
 
+
+
+----------------
+
+
+## Frugal AIエコシステムとプロジェクトの起源
+
+Slipstreamは、ローカルAIインフラの民主化を目指して2026年を通じて構築された、3つの独立したプロジェクトの集大成である。
+
+**iGPUからの追放とCPU単独推論という試練（2025年3月）**
+
+Slipstreamの基盤は、エンタープライズ級のハードウェア上で構築されたわけではない。それは最悪のシナリオ、すなわち壊れたソフトウェアの抽象化レイヤーに閉じ込められた2022年製RyzenノートPCという環境下で鍛え上げられたものだ。
+
+2025年初頭、標準的なプロプライエタリ（独占的）デーモンは、AMDの統合GPU（iGPU）との適切なインターフェース接続に完全に失敗していた。OEMのBIOS制限を回避するために`UniversalAMDFormBrowser`を駆使し、16GBのUMAフレームバッファをハードウェアレベルで強制ロックしたにもかかわらず、ベンダー提供のラッパーはハードウェアを誤認識し続け、「VRAM不足」と決めつけ、iGPUへの演算オフロードを頑なに拒否した。
+
+フォーラムで環境変数の「モグラ叩き」に興じたり、企業からの修正パッチを待ちわびたりする代わりに、演算処理をx86コアへ強制的にルーティングする決断を下した。純粋な必要性に迫られ、完全なローカルホスト型のドキュメント検索およびコンテキスト注入パイプラインをゼロから設計・構築した。これは「RAG」という学術用語がこのプロジェクトに持ち込まれるずっと前のことである。
+
+システムのDDRメモリのみで重い推論を実行するのは絶望的なほど遅かったが、それはメモリ帯域幅の制限という容赦のない物理法則を叩き込まれる、過酷なマスタークラス（特別授業）となった。このCPUバウンドのボトルネックを生き延びた経験こそが、Slipstreamの絶対に妥協しない「CPUオフロード厳禁」という信条を結晶化させたのである。
+
+さらに重要なのは、これがFrugal AIの中核となる精神を確立したことだ。業界標準のソフトウェアがあなたの持つシリコン（ハードウェア）の能力を引き出せない時、開発者に修正を乞うてはならない。直接ベアメタル（ハードウェアの深部）にアクセスし、それらを完全に置き換えるアーキテクチャを自ら構築するのだ。
+
+**FrugalAIHQ.com（2026年1月）**
+
+この取り組みは、限られた予算内で実践的なAIデプロイメントを教えるためのコミュニティハブおよびDiscordサーバーとして始まった。チュートリアル目的のコミュニティ自体は小規模に留まったものの、このプロジェクトは後に続くすべての基盤を確立し、完全にプロビジョニングされたエンタープライズ級のCDNとウェブインフラを遺産として残した。
+
+**FieldMouse-AI.com（2026年2月）**
+
+カスタムRAGパイプライン用に「実用的なQwen3.5の量子化モデルが1つ欲しい」という単純な要求から始まったものは、急速に本格的な産業規模のオペレーションへと拡大した。既存のモデルで妥協する代わりに、独自の自動量子化ファクトリー（工場）をゼロから設計した。標準的な`wikitext`データセットでは到底満足のいく結果が得られないと分かっていたため、200万トークンを超える独自の`imatrix`データセットを手作業でキュレーション（厳選）した。3月19日までに、FieldMouse-AIファクトリーは230以上の高度に最適化されたモデルをOllamaレジストリに公開した。
+
+**Slipstream-LLM.com（2026年8月）**
+
+Slipstreamは当初、投機的デコーディング（Speculative Decoding）のための実験的な技術デモとして始まった。しかし8月14日、ネイティブで`draft-mtp`をサポートするQwen3.8:27Bがリリースされた。直ちにオペレーションを一時停止し、FieldMouse-AIファクトリー全体のアップグレードを断行した。新たに拡張された400万トークン超の巨大な`imatrix`を使用し、すべてのモデルコレクションを再量子化。これにより、FieldMouse-AIレジストリはQwen3.6:35B-A3Bのようなヘビー級モデルを含む450以上のモデルを抱えるまでに膨れ上がった。
+
+これほど高度に専門化された投機的構成を、手動でテストすることはもはや不可能になった。ここでシステムエンジニアとしての本能が目覚めた。単なる技術デモで終わるはずだったものは、異種混合（ヘテロジニアス）かつマルチGPU環境下での投機的デコーディングという過酷な負荷を処理するために構築された、動的マルチスレッド・オーケストレーションエンジン「Slipstream」へと進化したのである。
 
 
 ---
+
+
 
 ## Architecture & Hardware Economics
 
