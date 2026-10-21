@@ -66,7 +66,7 @@ Instead of playing environment-variable whack-a-mole on the forums or waiting fo
 
 Running heavy inference exclusively on system DDR memory was agonizingly slow, but it provided a grueling masterclass in the unforgiving physics of memory bandwidth constraints. Surviving that CPU-bound bottleneck is exactly what crystallized Slipstream's uncompromising **"Zero CPU Offload"** mandate.
 
-More importantly, it established the core Frugal AI ethos: when the industry-standard software fails to utilize your silicon, you do not beg the developers for a fix. You go straight to the metal and build an architecture that replaces them entirely.
+More importantly, it established the core Frugal AI HQ ethos: when the industry-standard software fails to utilize your silicon, you do not beg the developers for a fix. You go straight to the metal and build an architecture that replaces them entirely.
 
 **FrugalAIHQ.com (January 2026)**
 
@@ -74,13 +74,13 @@ The initiative began as a community hub and Discord server designed to teach han
 
 **FieldMouse-AI.com (February 2026)**
 
-What started as a simple requirement for a single usable Qwen3.5 quant for a custom RAG pipeline rapidly escalated into a full-scale industrial operation. Rather than settling for existing models, a custom automated quantization factory was engineered from scratch. Knowing standard `wikitext` datasets would yield subpar results, a proprietary 2,000,000+ token `imatrix` dataset was hand-curated. By March 19, the FieldMouse-AI factory had published over 230 highly optimized models to the Ollama registry.
+What started as a simple requirement for a single usable Qwen3.5 quant for my custom RAG pipeline rapidly escalated into a full-scale industrial operation. Rather than settling for existing models, a custom automated quantization factory was engineered from scratch. Knowing standard `wikitext` datasets would yield subpar results, a proprietary 2,000,000+ token `imatrix` dataset was hand-curated. By March 19, the FieldMouse-AI factory had published over 230 highly optimized models to the Ollama registry.
 
 **Slipstream-LLM.com (August 2026)**
 
-Slipstream began as an experimental tech demo for speculative decoding. However, on August 14, Qwen3.8:27B was released with native `draft-mtp` support. Operations were immediately paused to upgrade the entire FieldMouse-AI factory. Using a massive, newly expanded 4,000,000+ token `imatrix`, the entire model collection was requantized—swelling the FieldMouse-AI registry to over 450 models, including heavyweights like Qwen3.6:35B-A3B.
+Slipstream began as an experimental tech demo for speculative decoding. However, on August 14, Qwen3.8:27B was released with native `draft-mtp` support. Operations were immediately paused to upgrade the entire FieldMouse-AI factory. Using a massive, newly expanded 4,000,000+ token `imatrix`, the entire model collection was requantized—swelling the FieldMouse-AI registry to over 450 models, including heavyweights like Qwen3.6:35B-A3B along with the newly released Qwen3.8:27B.
 
-Testing these highly specialized speculative configurations manually became impossible. Systems engineering instincts took over, and what was supposed to be a simple tech demo evolved into Slipstream: a dynamic, multi-threaded orchestration engine built to handle the heavy lifting of heterogeneous, multi-GPU speculative decoding.
+Testing these highly specialized speculative configurations manually became impossible. So, systems engineering instincts took over, and what was supposed to be a simple tech demo evolved into Slipstream: a dynamic, multi-threaded orchestration engine built to handle the heavy lifting of heterogeneous, multi-GPU speculative decoding.
 
 
 
